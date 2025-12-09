@@ -1,26 +1,449 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Sui Brand Colors */
+  --sui-blue: #4DA2FF;
+  --sui-blue-dark: #0284C7;
+  --sui-blue-light: #7DD3FC;
+  --sui-cyan: #06B6D4;
+  --sui-teal: #14B8A6;
+
+  /* Background */
+  --background: #0A0F1E;
+  --background-card: #0F172A;
+  --foreground: #F8FAFC;
+
+  /* Gradients */
+  --gradient-sui: linear-gradient(135deg, #4DA2FF 0%, #06B6D4 50%, #14B8A6 100%);
+  --gradient-hero: linear-gradient(180deg, #0A0F1E 0%, #1E293B 50%, #0F172A 100%);
+
+  /* Accent Colors */
+  --accent-purple: #A855F7;
+  --accent-pink: #EC4899;
+  --accent-green: #10B981;
+  --accent-orange: #F59E0B;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+/* Improve text rendering */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+p {
+  line-height: 1.7;
+}
+
+button {
+  line-height: 1;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Fluid background gradient - Enhanced with Sui colors */
+.fluid-gradient {
+  background: linear-gradient(
+    135deg,
+    #0A0F1E 0%,
+    #1E293B 20%,
+    #0F172A 40%,
+    #1E293B 60%,
+    #0A0F1E 80%,
+    #0F172A 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+}
+
+.fluid-gradient-sui {
+  background: linear-gradient(
+    135deg,
+    #0A0F1E 0%,
+    rgba(77, 162, 255, 0.15) 25%,
+    rgba(6, 182, 212, 0.15) 50%,
+    rgba(20, 184, 166, 0.15) 75%,
+    #0A0F1E 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 25s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Glass morphism effect - Enhanced */
+.glass {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(77, 162, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-strong {
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid rgba(77, 162, 255, 0.3);
+}
+
+/* Glow effects - Sui themed */
+.glow-sui {
+  box-shadow: 0 0 40px rgba(77, 162, 255, 0.4),
+              0 0 80px rgba(6, 182, 212, 0.2);
+}
+
+.glow-blue {
+  box-shadow: 0 0 30px rgba(77, 162, 255, 0.5);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+}
+
+.glow-teal {
+  box-shadow: 0 0 30px rgba(20, 184, 166, 0.5);
+}
+
+.glow-purple {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+}
+
+.glow-pink {
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+}
+
+/* Text gradients - Sui brand */
+.text-gradient-sui {
+  background: linear-gradient(135deg, #4DA2FF 0%, #06B6D4 50%, #14B8A6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(90deg, #4DA2FF, #7DD3FC, #0284C7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(90deg, #A855F7, #EC4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-rainbow {
+  background: linear-gradient(90deg, #4DA2FF, #06B6D4, #10B981, #F59E0B, #EC4899, #A855F7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 100%;
+  animation: gradientSlide 3s ease infinite;
+}
+
+@keyframes gradientSlide {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Button styles - Modernized with Sui branding */
+.btn-primary {
+  background: linear-gradient(135deg, #4DA2FF 0%, #06B6D4 50%, #14B8A6 100%);
+  background-size: 200% 100%;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(77, 162, 255, 0.4),
+              0 8px 16px rgba(6, 182, 212, 0.3);
+  background-position: 100% 0;
+}
+
+.btn-secondary {
+  background: rgba(77, 162, 255, 0.1);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(77, 162, 255, 0.3);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(77, 162, 255, 0.2);
+  border-color: rgba(77, 162, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(77, 162, 255, 0.2);
+}
+
+/* Story card container */
+.story-container {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  aspect-ratio: 9 / 16;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+@media (min-width: 768px) {
+  .story-container {
+    max-width: 375px;
+  }
+}
+
+/* Better spacing utilities */
+.section-spacing {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section-spacing {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+.content-padding {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .content-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Prevent text selection during swipe */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Dapp kit overrides */
+[data-dapp-kit] {
+  --dapp-kit-bg: rgba(255, 255, 255, 0.1);
+  --dapp-kit-border: rgba(255, 255, 255, 0.2);
+  --dapp-kit-text: white;
+}
+
+/* Loading shimmer */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Pulse animation for loading states */
+.pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Force proper spacing on main elements */
+main {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+input, button, form {
+  box-sizing: border-box !important;
+}
+
+/* Ensure Tailwind padding/margin utilities work */
+.px-4 { padding-left: 1rem !important; padding-right: 1rem !important; }
+.px-6 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+.px-8 { padding-left: 2rem !important; padding-right: 2rem !important; }
+.px-10 { padding-left: 2.5rem !important; padding-right: 2.5rem !important; }
+.px-12 { padding-left: 3rem !important; padding-right: 3rem !important; }
+
+.py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+.py-3 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+.py-4 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+.py-5 { padding-top: 1.25rem !important; padding-bottom: 1.25rem !important; }
+.py-8 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+.py-10 { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+.py-12 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+.py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+.py-20 { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+
+.p-6 { padding: 1.5rem !important; }
+.p-8 { padding: 2rem !important; }
+.p-10 { padding: 2.5rem !important; }
+
+.mb-3 { margin-bottom: 0.75rem !important; }
+.mb-4 { margin-bottom: 1rem !important; }
+.mb-5 { margin-bottom: 1.25rem !important; }
+.mb-6 { margin-bottom: 1.5rem !important; }
+.mb-8 { margin-bottom: 2rem !important; }
+.mb-10 { margin-bottom: 2.5rem !important; }
+.mb-12 { margin-bottom: 3rem !important; }
+.mb-14 { margin-bottom: 3.5rem !important; }
+.mb-16 { margin-bottom: 4rem !important; }
+
+.gap-2 { gap: 0.5rem !important; }
+.gap-3 { gap: 0.75rem !important; }
+.gap-4 { gap: 1rem !important; }
+.gap-6 { gap: 1.5rem !important; }
+.gap-8 { gap: 2rem !important; }
+
+.space-y-4 > * + * { margin-top: 1rem !important; }
+.space-y-5 > * + * { margin-top: 1.25rem !important; }
+.space-y-8 > * + * { margin-top: 2rem !important; }
+
+.min-h-\[200px\] { min-height: 200px !important; }
+
+/* Line heights */
+.leading-\[1\.15\] { line-height: 1.15 !important; }
+.leading-\[1\.3\] { line-height: 1.3 !important; }
+.leading-\[1\.6\] { line-height: 1.6 !important; }
+.leading-\[1\.8\] { line-height: 1.8 !important; }
+.leading-tight { line-height: 1.25 !important; }
+.leading-relaxed { line-height: 1.625 !important; }
+
+/* Responsive utilities */
+@media (min-width: 768px) {
+  .md\:px-8 { padding-left: 2rem !important; padding-right: 2rem !important; }
+  .md\:px-12 { padding-left: 3rem !important; padding-right: 3rem !important; }
+  .md\:py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+  .md\:py-20 { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+}
+
+/* Neon text effect */
+.neon-text {
+  background: linear-gradient(90deg, #00ff88, #00ffff, #ff00ff, #00ff88);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: neonShift 3s ease infinite;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 255, 0.3);
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.6));
+}
+
+@keyframes neonShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
