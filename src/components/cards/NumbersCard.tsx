@@ -13,20 +13,14 @@ export function NumbersCard({ data }: NumbersCardProps) {
     {
       label: 'TRANSACTIONS',
       value: data.totalTransactions,
-      subtext: `(${formatNumber(data.totalCommands)} Commands)`,
-      percentage: data.percentiles.transactions,
     },
     {
       label: 'PROTOCOLS USED',
       value: data.uniqueProtocols.length,
-      subtext: null,
-      percentage: data.percentiles.protocols,
     },
     {
       label: 'ACTIVE DAYS',
       value: data.activeDays,
-      subtext: null,
-      percentage: data.percentiles.activeDays,
     },
   ];
 
@@ -42,7 +36,7 @@ export function NumbersCard({ data }: NumbersCardProps) {
   const barMaxes = [maxTx, maxProtocols, maxDays];
 
   return (
-    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto w-full h-full">
+    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto w-full h-full px-2">
       {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
@@ -61,17 +55,14 @@ export function NumbersCard({ data }: NumbersCardProps) {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 + index * 0.15, duration: 0.5 }}
-            className="bg-white/5 rounded-xl p-3 border border-white/10"
+            className="bg-white/5 rounded-xl p-4 border border-white/10"
           >
-            <div className="flex justify-between items-start mb-1">
+            <div className="mb-2">
               <span className="text-white/60 text-xs">{stat.label}</span>
-              <span className="text-white/40 text-xs">
-                Top {100 - Math.round(stat.percentage)}%
-              </span>
             </div>
 
             {/* Animated bar */}
-            <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-1">
+            <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-2">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${getBarWidth(stat.value, barMaxes[index])}%` }}
@@ -80,36 +71,17 @@ export function NumbersCard({ data }: NumbersCardProps) {
               />
             </div>
 
-            <div className="flex items-baseline gap-2">
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 + index * 0.15, duration: 0.3 }}
-                className="text-2xl font-bold text-white"
-              >
-                {formatNumber(stat.value)}
-              </motion.span>
-              {stat.subtext && (
-                <span className="text-white/50 text-xs">{stat.subtext}</span>
-              )}
-            </div>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 + index * 0.15, duration: 0.3 }}
+              className="text-2xl font-bold text-white"
+            >
+              {formatNumber(stat.value)}
+            </motion.span>
           </motion.div>
         ))}
       </div>
-
-      {/* Comparison text */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="mt-4 text-white/70 text-sm"
-      >
-        More active than{' '}
-        <span className="text-gradient-sui font-bold">
-          {Math.round(data.percentiles.transactions)}%
-        </span>{' '}
-        of Sui users
-      </motion.p>
     </div>
   );
 }

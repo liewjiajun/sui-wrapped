@@ -13,7 +13,7 @@ export function GasSaviorCard({ data }: GasSaviorCardProps) {
   const suiSpent = mistToSui(BigInt(gasSavings.totalSuiGasSpent));
 
   return (
-    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto h-full">
+    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto h-full px-2">
       {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: -20 }}

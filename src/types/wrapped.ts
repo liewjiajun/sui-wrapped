@@ -144,6 +144,19 @@ export interface NftMetrics {
   creatorSupportScore: number;
 }
 
+export interface NFTHolding {
+  collection: string;
+  displayName: string;
+  count: number;
+  isBluechip: boolean;
+}
+
+export interface NFTHoldings {
+  holdings: NFTHolding[];
+  totalNFTs: number;
+  bluechipCount: number;
+}
+
 export interface GasSavings {
   totalSuiGasSpent: string; // MIST as string for precision
   totalSuiGasUsd: number;
@@ -183,6 +196,7 @@ export interface WrappedData {
   lendingMetrics: LendingMetrics;
   stakingMetrics: StakingMetrics;
   nftMetrics: NftMetrics;
+  nftHoldings: NFTHoldings;
 
   // Persona
   persona: Persona;

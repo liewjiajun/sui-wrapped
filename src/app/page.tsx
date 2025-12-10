@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useDisconnectWallet } from '@mysten/dapp-kit';
 import { ConnectButton } from '@/components/wallet/ConnectButton';
-import { isValidSuiAddress } from '@/lib/utils';
+import { isValidSuiAddress, truncateAddress } from '@/lib/utils';
 
 export default function LandingPage() {
   const router = useRouter();
   const currentAccount = useCurrentAccount();
+  const { mutate: disconnect } = useDisconnectWallet();
   const [manualAddress, setManualAddress] = useState('');
   const [error, setError] = useState('');
 
@@ -131,18 +132,45 @@ export default function LandingPage() {
           {/* Connect Wallet Button */}
           <div className="flex flex-col items-center gap-4">
             {currentAccount ? (
-              <button
-                onClick={handleConnectedWallet}
-                className="w-full py-5 px-8 bg-gradient-to-r from-[#4DA2FF] via-[#06B6D4] to-[#14B8A6] text-white text-lg font-bold rounded-2xl hover:shadow-2xl transition-all duration-300 glow-sui transform hover:scale-[1.02] relative overflow-hidden group"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-3">
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  View My Wrapped
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              </button>
+              <>
+                {/* Connected wallet info */}
+                <div className="w-full flex items-center justify-between bg-white/10 backdrop-blur-xl rounded-xl px-4 py-3 border border-white/20">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#4DA2FF] to-[#14B8A6] flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-white/60 text-xs">Connected</p>
+                      <p className="text-white font-mono text-sm">{truncateAddress(currentAccount.address)}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => disconnect()}
+                    className="text-white/50 hover:text-white/80 transition-colors p-2"
+                    title="Disconnect wallet"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* View Wrapped button */}
+                <button
+                  onClick={handleConnectedWallet}
+                  className="w-full py-5 px-8 bg-gradient-to-r from-[#4DA2FF] via-[#06B6D4] to-[#14B8A6] text-white text-lg font-bold rounded-2xl hover:shadow-2xl transition-all duration-300 glow-sui transform hover:scale-[1.02] relative overflow-hidden group"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-3">
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    View My Wrapped
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                </button>
+              </>
             ) : (
               <ConnectButton
                 className="w-full justify-center py-5 text-lg font-bold"

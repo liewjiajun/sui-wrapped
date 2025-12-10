@@ -1,13 +1,41 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
-import { PERSONA_COPY, Persona } from '@/types/wrapped';
+import { PERSONA_COPY, Persona, WrappedData } from '@/types/wrapped';
 
 export const runtime = 'edge';
 
-// Fetch wrapped data (simplified for OG generation)
-async function getWrappedData(address: string) {
-  // In production, fetch from your API or database
-  // For now, generate deterministic mock data based on address
+// Fetch wrapped data from the API
+async function getWrappedDataFromApi(address: string, baseUrl: string): Promise<{
+  address: string;
+  persona: Persona;
+  totalTransactions: number;
+  gasSavedUsd: number;
+  uniqueProtocols: number;
+}> {
+  try {
+    // Fetch from the wrapped API endpoint
+    const response = await fetch(`${baseUrl}/api/wrapped/${address}`, {
+      next: { revalidate: 3600 }, // Cache for 1 hour
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      if (result.success && result.data) {
+        const data = result.data as WrappedData;
+        return {
+          address,
+          persona: data.persona,
+          totalTransactions: data.totalTransactions,
+          gasSavedUsd: Math.round(data.gasSavings.savingsUsd),
+          uniqueProtocols: data.uniqueProtocols.length,
+        };
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching wrapped data for OG:', error);
+  }
+
+  // Fallback to deterministic mock data if API fails
   const seed = address.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const random = (min: number, max: number) => {
     const x = Math.sin(seed + min + max) * 10000;
@@ -38,13 +66,13 @@ export async function GET(
 ) {
   try {
     const { address } = await params;
-    const { searchParams } = new URL(request.url);
+    const { searchParams, origin } = new URL(request.url);
 
     const showPersona = searchParams.get('persona') !== 'false';
     const showGas = searchParams.get('gas') === 'true';
     const showTx = searchParams.get('tx') === 'true';
 
-    const data = await getWrappedData(address);
+    const data = await getWrappedDataFromApi(address, origin);
     const personaCopy = PERSONA_COPY[data.persona];
 
     // Persona gradient colors

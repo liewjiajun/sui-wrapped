@@ -12,7 +12,7 @@ export function ArrivalCard({ data }: ArrivalCardProps) {
   const formattedDate = formatDate(data.firstTransactionTimestamp);
 
   return (
-    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto h-full">
+    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto h-full px-2">
       {/* Animated droplet icon */}
       <motion.div
         initial={{ y: -30, opacity: 0 }}
@@ -63,14 +63,9 @@ export function ArrivalCard({ data }: ArrivalCardProps) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.5 }}
-        className="space-y-2"
       >
         <p className="text-white/80">
           Day <span className="font-bold text-gradient-sui">{data.daysAfterMainnetLaunch}</span> of Mainnet
-        </p>
-        <p className="text-white/80">
-          Earlier than{' '}
-          <span className="font-bold text-gradient-sui">{data.earlierThanPercentage}%</span> of users
         </p>
       </motion.div>
 

@@ -16,12 +16,13 @@ import {
   ProtocolCard,
   TradingCard,
   DefiCard,
+  NFTCard,
   PersonaCard,
 } from '@/components/cards';
 import { ShareModal } from '@/components/share/ShareModal';
 import { LOADING_MESSAGES } from '@/types/wrapped';
 
-const TOTAL_CARDS = 7;
+const TOTAL_CARDS = 8;
 
 export default function WrappedPage() {
   const params = useParams();
@@ -169,6 +170,7 @@ export default function WrappedPage() {
     <ProtocolCard key="protocol" data={data} />,
     <TradingCard key="trading" data={data} />,
     <DefiCard key="defi" data={data} />,
+    <NFTCard key="nft" data={data} />,
     <PersonaCard key="persona" data={data} />,
   ];
 

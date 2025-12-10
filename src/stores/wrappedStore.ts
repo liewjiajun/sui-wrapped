@@ -41,7 +41,7 @@ interface WrappedState {
   reset: () => void;
 }
 
-const TOTAL_CARDS = 7;
+const TOTAL_CARDS = 8;
 
 const initialShareOptions: ShareOptions = {
   showPersona: true,

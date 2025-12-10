@@ -2,27 +2,52 @@
 
 import { motion } from 'framer-motion';
 import type { WrappedData } from '@/types/wrapped';
-import { formatCurrency, formatShortDate } from '@/lib/utils';
 
 interface DefiCardProps {
   data: WrappedData;
 }
 
 export function DefiCard({ data }: DefiCardProps) {
-  const { lendingMetrics } = data;
+  const { protocolBreakdown, categoryBreakdown } = data;
 
-  // Health factor color and message
-  const getHealthFactorStyle = (hf: number) => {
-    if (hf < 1.05) return { color: 'text-red-400', message: 'Dangerously close!' };
-    if (hf < 1.2) return { color: 'text-orange-400', message: 'Cutting it close!' };
-    if (hf < 1.5) return { color: 'text-yellow-400', message: 'Living on the edge!' };
-    return { color: 'text-green-400', message: 'Playing it safe!' };
+  // Get lending protocols
+  const lendingProtocols = protocolBreakdown
+    .filter(p => p.category === 'lending')
+    .slice(0, 4);
+
+  // Get LST protocols
+  const lstProtocols = protocolBreakdown
+    .filter(p => p.category === 'lst')
+    .slice(0, 4);
+
+  const totalLendingTx = categoryBreakdown.lending.transactionCount;
+  const totalLstTx = categoryBreakdown.lst.transactionCount;
+  const totalDeFiTx = totalLendingTx + totalLstTx;
+
+  // Determine DeFi profile
+  const getDefiProfile = () => {
+    if (totalDeFiTx === 0) {
+      return { title: 'DeFi Explorer', emoji: '🔍', description: 'Ready to dive in' };
+    }
+    if (totalDeFiTx > 100) {
+      return { title: 'DeFi Degen', emoji: '🔥', description: 'Living on-chain' };
+    }
+    if (totalDeFiTx > 50) {
+      return { title: 'Yield Farmer', emoji: '🌾', description: 'Maximizing returns' };
+    }
+    if (totalDeFiTx > 20) {
+      return { title: 'DeFi Enthusiast', emoji: '📈', description: 'Growing portfolio' };
+    }
+    if (totalLstTx > totalLendingTx) {
+      return { title: 'Liquid Staker', emoji: '💧', description: 'Staking for yield' };
+    }
+    return { title: 'Lender', emoji: '🏦', description: 'Earning interest' };
   };
 
-  const hfStyle = getHealthFactorStyle(lendingMetrics.minHealthFactor);
+  const defiProfile = getDefiProfile();
 
-  // No lending activity - show minimal card
-  if (lendingMetrics.totalSuppliedUsd === 0 && lendingMetrics.totalBorrowedUsd === 0) {
+  // No DeFi activity - show minimal card
+  if (totalDeFiTx === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto h-full">
         <motion.h2
@@ -31,7 +56,7 @@ export function DefiCard({ data }: DefiCardProps) {
           transition={{ duration: 0.5 }}
           className="text-2xl md:text-3xl font-bold text-white mb-6"
         >
-          DeFi Risk Profile
+          DeFi Activity
         </motion.h2>
 
         <motion.div
@@ -48,7 +73,7 @@ export function DefiCard({ data }: DefiCardProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto w-full h-full">
+    <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto w-full h-full px-2">
       {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
@@ -56,87 +81,88 @@ export function DefiCard({ data }: DefiCardProps) {
         transition={{ duration: 0.5 }}
         className="text-2xl md:text-3xl font-bold text-white mb-4"
       >
-        DeFi Risk Profile
+        DeFi Activity
       </motion.h2>
 
-      {/* Lending Stats */}
+      {/* Stats row */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="w-full bg-white/5 rounded-xl p-3 border border-white/10 mb-3"
+        className="w-full grid grid-cols-2 gap-3 mb-4"
       >
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <p className="text-green-400 text-xl font-bold">
-              {formatCurrency(lendingMetrics.totalSuppliedUsd)}
-            </p>
-            <p className="text-white/50 text-xs">Supplied</p>
-          </div>
-          <div>
-            <p className="text-orange-400 text-xl font-bold">
-              {formatCurrency(lendingMetrics.totalBorrowedUsd)}
-            </p>
-            <p className="text-white/50 text-xs">Borrowed</p>
-          </div>
+        <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl p-3 border border-green-400/30">
+          <p className="text-2xl font-bold text-green-400">{totalLendingTx}</p>
+          <p className="text-white/50 text-xs">Lending Txns</p>
+        </div>
+        <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl p-3 border border-blue-400/30">
+          <p className="text-2xl font-bold text-blue-400">{totalLstTx}</p>
+          <p className="text-white/50 text-xs">LST Txns</p>
         </div>
       </motion.div>
 
-      {/* Health Factor Box */}
+      {/* Lending Protocols */}
+      {lendingProtocols.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="w-full mb-3"
+        >
+          <p className="text-white/60 text-xs mb-2 text-left">Lending Protocols</p>
+          <div className="flex flex-wrap gap-2">
+            {lendingProtocols.map((protocol, index) => (
+              <motion.div
+                key={protocol.protocol}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 + index * 0.1, duration: 0.3 }}
+                className="bg-green-500/10 border border-green-400/30 rounded-lg px-3 py-2"
+              >
+                <p className="text-white font-medium text-sm">{protocol.displayName}</p>
+                <p className="text-green-400/70 text-xs">{protocol.transactionCount} txns</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* LST Protocols */}
+      {lstProtocols.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+          className="w-full mb-4"
+        >
+          <p className="text-white/60 text-xs mb-2 text-left">Liquid Staking</p>
+          <div className="flex flex-wrap gap-2">
+            {lstProtocols.map((protocol, index) => (
+              <motion.div
+                key={protocol.protocol}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7 + index * 0.1, duration: 0.3 }}
+                className="bg-blue-500/10 border border-blue-400/30 rounded-lg px-3 py-2"
+              >
+                <p className="text-white font-medium text-sm">{protocol.displayName}</p>
+                <p className="text-blue-400/70 text-xs">{protocol.transactionCount} txns</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* DeFi Profile Badge */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className="w-full bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl p-4 border border-orange-400/30 mb-3"
+        transition={{ delay: 0.8, duration: 0.5 }}
+        className="w-full bg-white/5 rounded-xl p-4 border border-white/10"
       >
-        <p className="text-white/70 text-xs mb-2">Lowest Health Factor</p>
-
-        {/* Health Factor Visual */}
-        <div className="relative h-6 bg-white/10 rounded-full overflow-hidden mb-2">
-          <div className="absolute left-0 top-0 bottom-0 w-1/4 bg-red-500/30" />
-          <div className="absolute left-1/4 top-0 bottom-0 w-1/4 bg-orange-500/30" />
-          <div className="absolute left-1/2 top-0 bottom-0 w-1/2 bg-green-500/30" />
-          <motion.div
-            initial={{ left: '100%' }}
-            animate={{
-              left: `${Math.min(Math.max((lendingMetrics.minHealthFactor / 3) * 100, 5), 95)}%`,
-            }}
-            transition={{ delay: 0.8, duration: 1 }}
-            className="absolute top-0 bottom-0 w-1 bg-white shadow-lg shadow-white/50"
-          />
-        </div>
-
-        <div className="flex items-center justify-center gap-2">
-          <span className={`text-2xl font-bold ${hfStyle.color}`}>
-            {lendingMetrics.minHealthFactor.toFixed(2)}
-          </span>
-        </div>
-        <p className="text-white/60 text-xs mt-1">{hfStyle.message}</p>
-      </motion.div>
-
-      {/* Stats row */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-        className="w-full grid grid-cols-2 gap-2"
-      >
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-          <p className="text-white/60 text-xs">Liquidations</p>
-          <p
-            className={`text-lg font-bold ${
-              lendingMetrics.liquidations === 0 ? 'text-green-400' : 'text-red-400'
-            }`}
-          >
-            {lendingMetrics.liquidations}
-          </p>
-        </div>
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-          <p className="text-white/60 text-xs">Close Calls</p>
-          <p className="text-lg font-bold text-orange-400">
-            {lendingMetrics.closeCalls}
-          </p>
-        </div>
+        <span className="text-3xl mb-2 block">{defiProfile.emoji}</span>
+        <p className="text-lg font-bold text-white">{defiProfile.title}</p>
+        <p className="text-white/50 text-xs mt-1">{defiProfile.description}</p>
       </motion.div>
     </div>
   );

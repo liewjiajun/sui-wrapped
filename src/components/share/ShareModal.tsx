@@ -18,6 +18,7 @@ const SCREEN_OPTIONS = [
   { id: 'protocols', label: 'Protocols', emoji: '🌐' },
   { id: 'trading', label: 'Trading', emoji: '💱' },
   { id: 'defi', label: 'DeFi', emoji: '🏦' },
+  { id: 'nft', label: 'NFTs', emoji: '🖼️' },
   { id: 'persona', label: 'Persona', emoji: '🎭' },
 ] as const;
 

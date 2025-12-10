@@ -5,4 +5,5 @@ export { GasSaviorCard } from './GasSaviorCard';
 export { ProtocolCard } from './ProtocolCard';
 export { TradingCard } from './TradingCard';
 export { DefiCard } from './DefiCard';
+export { NFTCard } from './NFTCard';
 export { PersonaCard } from './PersonaCard';
