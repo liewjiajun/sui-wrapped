@@ -45,7 +45,7 @@ export function ArrivalCard({ data }: ArrivalCardProps) {
         transition={{ delay: 0.3, duration: 0.5 }}
         className="text-white/70 text-lg mb-3"
       >
-        You joined Sui on
+        You first transacted on Sui on
       </motion.p>
 
       {/* Date box */}

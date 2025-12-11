@@ -447,3 +447,43 @@ input, button, form {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
+
+/* Wave animations for background */
+@keyframes wave-slow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes wave-medium {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes wave-fast {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-wave-slow {
+  animation: wave-slow 25s linear infinite;
+}
+
+.animate-wave-medium {
+  animation: wave-medium 18s linear infinite;
+}
+
+.animate-wave-fast {
+  animation: wave-fast 12s linear infinite;
+}

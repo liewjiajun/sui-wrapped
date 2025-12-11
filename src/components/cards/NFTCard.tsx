@@ -2,9 +2,32 @@
 
 import { motion } from 'framer-motion';
 import type { WrappedData } from '@/types/wrapped';
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface NFTCardProps {
   data: WrappedData;
+}
+
+// Component for NFT collection thumbnail with fallback
+function CollectionImage({ imageUrl, displayName }: { imageUrl?: string; displayName: string }) {
+  const [error, setError] = useState(false);
+
+  if (!imageUrl || error) {
+    // Fallback to emoji
+    return <span className="text-lg">🖼️</span>;
+  }
+
+  return (
+    <div className="w-8 h-8 rounded-md overflow-hidden bg-white/10 flex-shrink-0">
+      <img
+        src={imageUrl}
+        alt={displayName}
+        className="w-full h-full object-cover"
+        onError={() => setError(true)}
+      />
+    </div>
+  );
 }
 
 export function NFTCard({ data }: NFTCardProps) {
@@ -106,7 +129,10 @@ export function NFTCard({ data }: NFTCardProps) {
               className="p-3 rounded-lg border bg-white/5 border-white/10"
             >
               <div className="flex items-center gap-2">
-                <span className="text-lg">🖼️</span>
+                <CollectionImage
+                  imageUrl={collection.imageUrl}
+                  displayName={collection.displayName}
+                />
                 <div className="text-left flex-1 min-w-0">
                   <p className="text-white font-medium text-xs truncate">{collection.displayName}</p>
                   <p className="text-white/50 text-[10px]">{collection.count} item{collection.count !== 1 ? 's' : ''}</p>

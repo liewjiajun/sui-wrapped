@@ -149,6 +149,7 @@ export interface NFTHolding {
   displayName: string;
   count: number;
   isBluechip: boolean;
+  imageUrl?: string; // Collection thumbnail
 }
 
 export interface NFTHoldings {

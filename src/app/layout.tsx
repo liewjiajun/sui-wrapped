@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 import '@mysten/dapp-kit/dist/index.css';
 import { SuiWalletProvider } from '@/components/wallet/WalletProvider';
@@ -56,6 +57,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${inter.variable} font-sans antialiased`}>
         <SuiWalletProvider>{children}</SuiWalletProvider>
+        <Analytics />
       </body>
     </html>
   );

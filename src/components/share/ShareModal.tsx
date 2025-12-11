@@ -7,22 +7,7 @@ import { useWrappedStore } from '@/stores/wrappedStore';
 import type { WrappedData } from '@/types/wrapped';
 import { PERSONA_COPY } from '@/types/wrapped';
 import { SHARE_TEMPLATES } from '@/lib/constants';
-import { formatCurrency, buildTwitterShareUrl, copyToClipboard, downloadImage } from '@/lib/utils';
-
-// Screen definitions for the selector
-const SCREEN_OPTIONS = [
-  { id: 'all', label: 'All Screens', emoji: '📊' },
-  { id: 'arrival', label: 'Join Date', emoji: '📅' },
-  { id: 'numbers', label: 'Numbers', emoji: '📈' },
-  { id: 'gas', label: 'Gas Savings', emoji: '⛽' },
-  { id: 'protocols', label: 'Protocols', emoji: '🌐' },
-  { id: 'trading', label: 'Trading', emoji: '💱' },
-  { id: 'defi', label: 'DeFi', emoji: '🏦' },
-  { id: 'nft', label: 'NFTs', emoji: '🖼️' },
-  { id: 'persona', label: 'Persona', emoji: '🎭' },
-] as const;
-
-type ScreenId = typeof SCREEN_OPTIONS[number]['id'];
+import { buildTwitterShareUrl, copyToClipboard, downloadImage } from '@/lib/utils';
 
 interface ShareModalProps {
   data: WrappedData;
@@ -30,49 +15,17 @@ interface ShareModalProps {
 
 export function ShareModal({ data }: ShareModalProps) {
   const { isShareModalOpen, setIsShareModalOpen } = useWrappedStore();
-
   const [copied, setCopied] = useState(false);
-  const [selectedScreen, setSelectedScreen] = useState<ScreenId>('persona');
 
   const personaCopy = PERSONA_COPY[data.persona];
 
   const getShareUrl = () => {
-    return `https://wrapped.sui.io/${data.address}`;
+    return `https://suiwrapped-2025.vercel.app/${data.address}`;
   };
 
   const getOgImageUrl = () => {
-    // Use relative URL for preview
     const url = new URL(`/api/wrapped/${data.address}/og`, window.location.origin);
-
-    // Map screen selections to parameters
-    switch (selectedScreen) {
-      case 'all':
-        url.searchParams.set('persona', 'true');
-        url.searchParams.set('gas', 'true');
-        url.searchParams.set('tx', 'true');
-        break;
-      case 'persona':
-        url.searchParams.set('persona', 'true');
-        url.searchParams.set('gas', 'false');
-        url.searchParams.set('tx', 'false');
-        break;
-      case 'gas':
-        url.searchParams.set('persona', 'false');
-        url.searchParams.set('gas', 'true');
-        url.searchParams.set('tx', 'false');
-        break;
-      case 'numbers':
-        url.searchParams.set('persona', 'false');
-        url.searchParams.set('gas', 'false');
-        url.searchParams.set('tx', 'true');
-        break;
-      default:
-        // For other screens, show persona by default
-        url.searchParams.set('persona', 'true');
-        url.searchParams.set('gas', 'false');
-        url.searchParams.set('tx', 'false');
-    }
-
+    url.searchParams.set('screen', 'overview');
     return url.toString();
   };
 
@@ -83,26 +36,7 @@ export function ShareModal({ data }: ShareModalProps) {
       SHARE_TEMPLATES.twitter.persona(personaCopy.title, personaCopy.emoji)
     );
 
-    // Add context based on selected screen
-    if (selectedScreen === 'gas' || selectedScreen === 'all') {
-      lines.push(
-        SHARE_TEMPLATES.twitter.gasSaved(
-          formatCurrency(data.gasSavings.savingsUsd)
-        )
-      );
-    }
-
-    if (selectedScreen === 'numbers' || selectedScreen === 'all') {
-      lines.push(
-        SHARE_TEMPLATES.twitter.transactions(
-          data.totalTransactions.toLocaleString()
-        )
-      );
-    }
-
-    if (selectedScreen === 'protocols' || selectedScreen === 'all') {
-      lines.push(SHARE_TEMPLATES.twitter.protocols(data.uniqueProtocols.length));
-    }
+    lines.push(`\n📊 ${data.totalTransactions.toLocaleString()} txns | ${data.uniqueProtocols.length} protocols | ${data.activeDays} active days`);
 
     lines.push(SHARE_TEMPLATES.twitter.footer);
 
@@ -123,7 +57,7 @@ export function ShareModal({ data }: ShareModalProps) {
   const handleDownloadImage = async () => {
     await downloadImage(
       getOgImageUrl(),
-      `sui-wrapped-2025-${selectedScreen}-${data.address.slice(0, 8)}.png`
+      `sui-wrapped-2025-${data.address.slice(0, 8)}.png`
     );
   };
 
@@ -154,37 +88,15 @@ export function ShareModal({ data }: ShareModalProps) {
                   Share Your Wrapped
                 </Dialog.Title>
 
-                {/* Screen Selector */}
-                <div className="mb-5">
-                  <p className="text-white/60 text-sm mb-3">Choose screen to share:</p>
-                  <div className="grid grid-cols-4 gap-2">
-                    {SCREEN_OPTIONS.map((screen) => (
-                      <button
-                        key={screen.id}
-                        onClick={() => setSelectedScreen(screen.id)}
-                        className={`flex flex-col items-center p-2 rounded-xl transition-all ${
-                          selectedScreen === screen.id
-                            ? 'bg-gradient-to-br from-[#4DA2FF]/30 to-[#14B8A6]/30 border border-[#4DA2FF]/50'
-                            : 'bg-white/5 border border-white/10 hover:bg-white/10'
-                        }`}
-                      >
-                        <span className="text-lg mb-1">{screen.emoji}</span>
-                        <span className="text-[10px] text-white/70 truncate w-full text-center">
-                          {screen.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 {/* Preview */}
                 <div className="mb-5">
                   <p className="text-white/60 text-sm mb-2">Preview:</p>
-                  <div className="rounded-xl overflow-hidden bg-slate-800 border border-white/10 aspect-[1200/630]">
+                  <div className="rounded-xl overflow-hidden bg-slate-800 border border-white/10 aspect-[2/1] relative">
                     <img
                       src={getOgImageUrl()}
                       alt="Share preview"
                       className="w-full h-full object-cover"
+                      loading="eager"
                     />
                   </div>
                 </div>
