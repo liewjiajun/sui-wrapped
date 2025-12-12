@@ -188,7 +188,7 @@ export const SHARE_TEMPLATES = {
     gasSaved: (amount: string) => `\n💰 Saved ${amount} in gas vs Ethereum`,
     transactions: (count: string) => `\n⚡ ${count} transactions`,
     protocols: (count: number) => `\n🔗 Used ${count} protocols`,
-    footer: '\n\nGet yours at wrapped.sui.io\n#SuiWrapped #Sui',
+    footer: '\n\nGet yours at suiwrapped-2025.vercel.app\n\n#SuiWrapped #Sui',
   },
 };
 

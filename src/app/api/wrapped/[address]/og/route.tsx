@@ -294,7 +294,7 @@ function renderOverviewScreen(data: WrappedData | null, address: string) {
 
           {/* Mainnet day */}
           <div style={{ display: 'flex', marginTop: '32px', fontSize: '18px', color: 'rgba(255,255,255,0.5)' }}>
-            Account started {mainnetDay} days after Sui Mainnet
+            First transaction: {mainnetDay} days after Sui Mainnet
           </div>
         </div>
 

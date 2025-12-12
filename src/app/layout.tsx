@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://wrapped.sui.io'),
+  metadataBase: new URL('https://suiwrapped-2025.vercel.app'),
   title: 'Sui Wrapped 2025 | Your Year on Sui',
   description:
     'Discover your personalized Sui blockchain journey. See your transactions, gas savings, favorite protocols, and unique persona.',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Sui Wrapped 2025',
     description: 'Discover your personalized Sui blockchain journey',
-    url: 'https://wrapped.sui.io',
+    url: 'https://suiwrapped-2025.vercel.app',
     siteName: 'Sui Wrapped',
     images: [
       {

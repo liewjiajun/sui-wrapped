@@ -44,8 +44,10 @@ export function ShareModal({ data }: ShareModalProps) {
   };
 
   const handleShareTwitter = () => {
-    const twitterUrl = buildTwitterShareUrl(getTwitterText(), getShareUrl());
-    window.open(twitterUrl, '_blank');
+    // Only include tweet text, no address URL
+    const twitterUrl = new URL('https://twitter.com/intent/tweet');
+    twitterUrl.searchParams.set('text', getTwitterText());
+    window.open(twitterUrl.toString(), '_blank');
   };
 
   const handleCopyLink = async () => {
@@ -89,7 +91,7 @@ export function ShareModal({ data }: ShareModalProps) {
                 </Dialog.Title>
 
                 {/* Preview */}
-                <div className="mb-5">
+                <div className="mb-4">
                   <p className="text-white/60 text-sm mb-2">Preview:</p>
                   <div className="rounded-xl overflow-hidden bg-slate-800 border border-white/10 aspect-[2/1] relative">
                     <img
@@ -101,8 +103,23 @@ export function ShareModal({ data }: ShareModalProps) {
                   </div>
                 </div>
 
+                {/* Instructions */}
+                <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                  <p className="text-blue-300 text-sm">
+                    <span className="font-semibold">Tip:</span> Save the image first, then share on X and attach it to your post!
+                  </p>
+                </div>
+
                 {/* Action buttons */}
                 <div className="flex gap-2">
+                  <button
+                    onClick={handleDownloadImage}
+                    className="flex-1 py-3 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <span>⬇️</span>
+                    Save Image
+                  </button>
+
                   <button
                     onClick={handleShareTwitter}
                     className="flex-1 py-3 bg-[#1DA1F2] text-white font-semibold rounded-xl hover:bg-[#1a8cd8] transition-colors flex items-center justify-center gap-2"
@@ -110,21 +127,15 @@ export function ShareModal({ data }: ShareModalProps) {
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
-                    Share
+                    Share on X
                   </button>
 
                   <button
                     onClick={handleCopyLink}
                     className="px-4 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-colors"
+                    title="Copy link"
                   >
                     {copied ? '✓' : '📋'}
-                  </button>
-
-                  <button
-                    onClick={handleDownloadImage}
-                    className="px-4 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-colors"
-                  >
-                    ⬇️
                   </button>
                 </div>
 
